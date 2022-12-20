@@ -12,6 +12,10 @@ def help_command(update,context):
 
 def handle_message(update,context):
     update.message.reply_text(update.message.text+ "...bales")
+    
+def photo_command(update,context):
+    update.message.bot.send_photo(update.message.chat.id,open('C:/Users/fasnt/Downloads/d.jpg','rb'))
+
 
 
 
@@ -21,6 +25,7 @@ def main():
 
     dp.add_handler(CommandHandler("start",start_command))
     dp.add_handler(CommandHandler("help",help_command))
+    dp.add_handler(CommandHandler("photo",photo_command))
     dp.add_handler(MessageHandler(Filters.text,handle_message))
 
     updater.start_polling(5)

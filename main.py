@@ -45,7 +45,15 @@ def handle_message(update,context):
         elif(arr[0] == "list"):
             list = mainUtilities.getListOfPersons(path)
             str = "\n".join(list)
-            update.message.bot.send_message(update.message.chat.id,str)
+            if(len(list)==0):
+                update.message.bot.send_message(update.message.chat.id,"no persons data for " + team + "," + city)
+                return
+
+            images = mainUtilities.getOnlyListImagesPath(path,list)
+            for i in range(0,len(images)):
+                update.message.bot.send_photo(update.message.chat.id,open(images[i],'rb'),caption=list[i].replace('_',' '))
+            return
+
 
         person_name = ' '.join(arr).lower()
         path+= "/"+ '_'.join(arr).lower()
@@ -61,15 +69,10 @@ def handle_message(update,context):
     
 
     update.message.bot.send_media_group(update.message.chat.id,images)
+    return
+
+
     
-
-
-
-
-
-
-
-
 
 def main():
     updater = Updater(API_KEY,use_context=True)

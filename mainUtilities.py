@@ -35,6 +35,21 @@ def getImagesOfFolder(path):
         imgs.append(InputMediaPhoto(open(path+'/'+f,'rb')))
     return imgs
 
+def getOnlyListImagesPath(path,list):
+    imgs =  []
+    if(not Path(path).exists()):
+        return 
+    for l in list:
+        p = path+'/'+l
+        valid_images = [".jpg",".gif",".png",".tga"]
+        for f in os.listdir(p):
+            ext = os.path.splitext(f)[1]
+            if(f.rsplit('.', 1)[0]!='1'):
+                continue
+            if ext.lower() not in valid_images:
+                continue
+            imgs.append(p+'/'+f)
+    return imgs
 
 def getAllCars(path):
     cars = []

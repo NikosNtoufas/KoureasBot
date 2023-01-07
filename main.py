@@ -1,20 +1,72 @@
 from telegram.ext import *
 from CONSTANTS import *
+import sqlite3
+import dbManager
+import mainUtilities
+
 
 print("KoureasBot started...")
 
 
 def start_command(update,context):
-    update.message.reply_text("Type something")
+    if(dbManager.userExists(update.message.chat)):
+        print(update.message.chat.id)
+        update.message.reply_text("Hello " +update.message.chat.first_name)
 
 def help_command(update,context):
     update.message.reply_text("help text")
 
 def handle_message(update,context):
-    update.message.reply_text(update.message.text+ "...bales")
+    if(not dbManager.userExists(update.message.chat)):
+        update.message.reply_text("Anauthorized user")
+        return
     
-def photo_command(update,context):
-    update.message.bot.send_photo(update.message.chat.id,open('C:/Users/fasnt/Downloads/d.jpg','rb'))
+    text = update.message.text
+    arr =text.split(" ")
+    team = mainUtilities.getTeam(arr)
+    if(team==""):
+        update.message.reply_text("no team detected")
+        return 
+    city = mainUtilities.getCity(arr)
+
+    if(city==""):
+        update.message.reply_text("no city detected")
+        return
+    
+    path = BASE_PATH + '/'+ team + '/'+ city
+
+    person_name = ''
+    if(len(arr)>0):
+        if arr[0] == "cars":
+            cars = mainUtilities.getAllCars(path)
+            str = "\n".join(cars)
+            update.message.bot.send_message(update.message.chat.id,str)
+            return
+        elif(arr[0] == "list"):
+            list = mainUtilities.getListOfPersons(path)
+            str = "\n".join(list)
+            update.message.bot.send_message(update.message.chat.id,str)
+
+        person_name = ' '.join(arr).lower()
+        path+= "/"+ '_'.join(arr).lower()
+
+    images = mainUtilities.getImagesOfFolder(path)
+    if(len(images)==0):
+        update.message.bot.send_message(update.message.chat.id,"no data")
+        return
+
+    #add caption
+    if(person_name!=''):
+        images[0].caption = person_name
+    
+
+    update.message.bot.send_media_group(update.message.chat.id,images)
+    
+
+
+
+
+
 
 
 
@@ -25,11 +77,11 @@ def main():
 
     dp.add_handler(CommandHandler("start",start_command))
     dp.add_handler(CommandHandler("help",help_command))
-    dp.add_handler(CommandHandler("photo",photo_command))
     dp.add_handler(MessageHandler(Filters.text,handle_message))
 
     updater.start_polling(5)
     updater.idle()
 
     
-main()
+if __name__ == '__main__':
+    main()

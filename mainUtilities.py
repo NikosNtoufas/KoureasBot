@@ -36,7 +36,7 @@ def getImagesOfFolder(path):
     return imgs
 
 def getOnlyListImagesPath(path,list):
-    imgs =  []
+    dict =  {}
     if(not Path(path).exists()):
         return 
     for l in list:
@@ -48,8 +48,9 @@ def getOnlyListImagesPath(path,list):
                 continue
             if ext.lower() not in valid_images:
                 continue
-            imgs.append(p+'/'+f)
-    return imgs
+            dict[l]=p+'/'+f
+        
+    return dict
 
 def getAllCars(path):
     cars = []

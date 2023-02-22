@@ -1,4 +1,5 @@
 from telegram.ext import *
+import telegram
 from CONSTANTS import *
 import sqlite3
 import dbManager
@@ -40,7 +41,7 @@ def handle_message(update,context):
         if arr[0] == "cars":
             cars = mainUtilities.getAllCars(path)
             str = "\n".join(cars)
-            update.message.bot.send_message(update.message.chat.id,str)
+            update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.MARKDOWN)
             return
         elif(arr[0] == "list"):
             list = mainUtilities.getListOfPersons(path)
@@ -50,8 +51,9 @@ def handle_message(update,context):
                 return
 
             images = mainUtilities.getOnlyListImagesPath(path,list)
-            for i in range(0,len(images)):
-                update.message.bot.send_photo(update.message.chat.id,open(images[i],'rb'),caption=list[i].replace('_',' '))
+            for i in images:
+                t= images[i]
+                update.message.bot.send_photo(update.message.chat.id,open(t,'rb'),caption=i.replace('_',' '))
             return
 
 

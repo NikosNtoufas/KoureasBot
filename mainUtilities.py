@@ -71,3 +71,53 @@ def getAllCars(path):
 def getListOfPersons(path):
     sub_folders = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
     return sub_folders
+
+
+def isProgramComand(arr):
+    list = ["προγραμμα","πρόγραμμα" ,"προγραμα","προγραμα","programma","programa" ]
+    for x in arr:
+        if x.lower() in list:
+            return True
+
+    return False
+
+def isImportantCommand(arr):
+    list = ["!","*","important"]
+    for x in arr:
+        if x.lower() in list:
+            return True
+
+
+def getMatchesText(matches):
+    str = ""
+    header1 = ""
+    header2 = ""
+    for m in matches:
+        if(m[5]!=header1):
+           
+            header1=m[5]
+
+            str += "\n\n<b>\t-------"+header1+"-------</b> \n" 
+
+            if(m[6]!=header2):
+                header2=m[6]
+                
+                str += "\n<u>"+header2+"</u>" 
+                
+        if(m[6]!=header2):
+            if(header2!=""):
+                str+="----------------------------------------------\n"
+            header2=m[6]
+            
+            str += "\n<u>"+header2+"</u>" 
+
+        if(m[7]=="very high"):
+            str+="\n<b><i>"+ m[3]+ " " + m[4] +" "+ m[1] + " vs "+ m[2]+"</i></b>❗"+"\n"
+        elif(m[7]=="high"):
+            str+="\n<i>"+ m[3]+ " " + m[4] +" "+ m[1] + " vs "+ m[2]+"</i>✈"+"\n"   
+        elif(m[7]=="medium"):
+            str+="\n<b>"+ m[3]+ " " + m[4] +" "+ m[1] + " vs "+ m[2]+"</b>"+"\n"   
+        else: 
+            str+="\n"+m[3]+ " " + m[4] +" " + m[1] + " vs "+ m[2]+"\n"
+
+    return str

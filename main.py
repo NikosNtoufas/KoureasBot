@@ -4,6 +4,7 @@ from CONSTANTS import *
 import sqlite3
 import dbManager
 import mainUtilities
+import flashscoreScraper.dbManagerFlashscore
 
 
 print("KoureasBot started...")
@@ -24,16 +25,31 @@ def handle_message(update,context):
     
     text = update.message.text
     arr =text.split(" ")
+
+
+
     team = mainUtilities.getTeam(arr)
     if(team==""):
         update.message.reply_text("no team detected")
         return 
+    
+    if(mainUtilities.isProgramComand(arr)):    
+        matches = flashscoreScraper.dbManagerFlashscore.getImportantMatches(team) if mainUtilities.isImportantCommand(arr) else flashscoreScraper.dbManagerFlashscore.getAllMatches(team)
+        str = mainUtilities.getMatchesText(matches)
+        update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.HTML)
+        return
+
+
+
     city = mainUtilities.getCity(arr)
 
     if(city==""):
         update.message.reply_text("no city detected")
         return
     
+  
+
+
     path = BASE_PATH + '/'+ team + '/'+ city
 
     person_name = ''

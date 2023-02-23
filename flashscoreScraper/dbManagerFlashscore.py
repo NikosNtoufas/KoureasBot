@@ -1,4 +1,6 @@
 import sqlite3
+from flashscoreScraper.CONSTANTS_FLASHSCORE import *
+
 
 def clearMatches(sport,competition):
 
@@ -45,3 +47,56 @@ def insertMatches(matches):
             print("The SQLite connection is closed")
 
     return
+
+
+def getAllMatches(team):
+    try:
+        sqliteConnection = sqlite3.connect('flashscoreMatches.db')
+        
+        par = (str(FLASHSCORE_MAIN_TEAMS[team]),str(FLASHSCORE_MAIN_TEAMS[team]))
+        if(team==""):
+            sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
+        else:
+            sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
+
+        cursor = sqliteConnection.cursor()
+       
+        cursor.execute(sql,par)
+        matches = cursor.fetchall()
+
+        sqliteConnection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+    return matches
+
+def getImportantMatches(team):
+    try:
+        sqliteConnection = sqlite3.connect('flashscoreMatches.db')
+        
+        par = (str(FLASHSCORE_MAIN_TEAMS[team]),str(FLASHSCORE_MAIN_TEAMS[team]),"very high","high")
+        if(team==""):
+            sql = ''' select * from matches where (importance=? or importance =?)'''
+        else:
+            sql = ''' select * from matches where (homeTeam=? or awayTeam=?) and (importance=? or importance =?) '''
+
+        cursor = sqliteConnection.cursor()
+       
+        cursor.execute(sql,par)
+        matches = cursor.fetchall()
+
+        sqliteConnection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+    return matches

@@ -5,7 +5,7 @@ import CONSTANTS_FLASHSCORE
 import time
 import sqlite3
 import dbManagerFlashscore
-from flashscore_scraperUtilities import *
+import flashscore_scraperUtilities
 
 
 
@@ -26,9 +26,9 @@ def run():
 
             matchesToSave = []
             for el in soup.find_all("div",class_="event__match"):
-                match = generateMatch(el,sport,competition)
+                match = flashscore_scraperUtilities.generateMatch(el,sport,competition)
 
-                if(mustSaveMatch(match)):
+                if(flashscore_scraperUtilities.mustSaveMatch(match)):
                     matchesToSave.append(match)
 
             dbManagerFlashscore.clearMatches(CONSTANTS_FLASHSCORE.FLASCORE_SPORTS_NAMING[sport],

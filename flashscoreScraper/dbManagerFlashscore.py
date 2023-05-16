@@ -1,5 +1,5 @@
-import sqlite3
-from flashscoreScraper.CONSTANTS_FLASHSCORE import *
+import sqlite3 
+from flashscoreScraper import CONSTANTS_FLASHSCORE
 
 
 def clearMatches(sport,competition):
@@ -53,7 +53,7 @@ def getAllMatches(team):
     try:
         sqliteConnection = sqlite3.connect('flashscoreMatches.db')
         
-        par = (str(FLASHSCORE_MAIN_TEAMS[team]),str(FLASHSCORE_MAIN_TEAMS[team]))
+        par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]))
         if(team==""):
             sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
         else:
@@ -79,7 +79,7 @@ def getImportantMatches(team):
     try:
         sqliteConnection = sqlite3.connect('flashscoreMatches.db')
         
-        par = (str(FLASHSCORE_MAIN_TEAMS[team]),str(FLASHSCORE_MAIN_TEAMS[team]),"very high","high")
+        par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),"very high","high")
         if(team==""):
             sql = ''' select * from matches where (importance=? or importance =?)'''
         else:

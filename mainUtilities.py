@@ -23,7 +23,7 @@ def getCity(arr):
     return ""
 
 
-def getImagesOfFolder(path):   
+def getImagesOfFolderAsGroupMedia(path):   
     imgs =  []
     if(not Path(path).exists()):
         return imgs
@@ -33,6 +33,18 @@ def getImagesOfFolder(path):
         if ext.lower() not in valid_images:
             continue
         imgs.append(InputMediaPhoto(open(path+'/'+f,'rb')))
+    return imgs
+
+def getImagesOfFolder(path):   
+    imgs =  []
+    if(not Path(path).exists()):
+        return imgs
+    valid_images = [".jpg",".gif",".png",".tga"]
+    for f in os.listdir(path):
+        ext = os.path.splitext(f)[1]
+        if ext.lower() not in valid_images:
+            continue
+        imgs.append(open(path+'/'+f,'rb'))
     return imgs
 
 def getOnlyListImagesPath(path,list):
@@ -68,7 +80,20 @@ def getAllCars(path):
 
     return cars
 
-def getListOfPersons(path):
+def getInfo(path):
+    for root, subdirs, files in os.walk(path):
+        for name in files:
+            if name=="info.txt":
+                filepath = os.path.join(root,name)
+                file = open(filepath, encoding="utf8")
+                data = file.read()
+                file.close()
+                return data
+    
+    return ""
+
+
+def getSubFolders(path):
     sub_folders = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
     return sub_folders
 

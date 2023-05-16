@@ -4,8 +4,8 @@ from CONSTANTS import *
 import sqlite3
 import dbManager
 import mainUtilities
-import flashscoreScraper.dbManagerFlashscore
-
+import sys
+from flashscoreScraper.dbManagerFlashscore import *
 
 print("KoureasBot started...")
 
@@ -34,7 +34,7 @@ def handle_message(update,context):
         return 
     
     if(mainUtilities.isProgramComand(arr)):    
-        matches = flashscoreScraper.dbManagerFlashscore.getImportantMatches(team) if mainUtilities.isImportantCommand(arr) else flashscoreScraper.dbManagerFlashscore.getAllMatches(team)
+        matches = getImportantMatches(team) if mainUtilities.isImportantCommand(arr) else getAllMatches(team)
         str = mainUtilities.getMatchesText(matches)
         update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.HTML)
         return
@@ -44,7 +44,17 @@ def handle_message(update,context):
     city = mainUtilities.getCity(arr)
 
     if(city==""):
-        update.message.reply_text("no city detected")
+        path = BASE_PATH + '/'+ team + '/'+ city
+         
+        list = mainUtilities.getSubFolders(path)
+        if(len(list)==0):
+            update.message.bot.send_message(update.message.chat.id,"no persons data for " + team + "," + city)
+            return
+        str = "\n".join(list)
+
+        #GET AVAILABLE CITIES
+        update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.MARKDOWN)
+        
         return
     
   
@@ -53,14 +63,31 @@ def handle_message(update,context):
     path = BASE_PATH + '/'+ team + '/'+ city
 
     person_name = ''
+    
+
+    if(len(arr)==0):
+        #send all city photos
+        images = mainUtilities.getImagesOfFolder(path)
+        if(len(images)==0):
+            update.message.bot.send_message(update.message.chat.id,"no data")
+            return
+        for i in images:
+            update.message.bot.send_photo(update.message.chat.id,i)
+
+        return
+    
+
+
     if(len(arr)>0):
         if arr[0] == "cars":
+            #get all available cars of city
             cars = mainUtilities.getAllCars(path)
             str = "\n".join(cars)
             update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.MARKDOWN)
             return
         elif(arr[0] == "list"):
-            list = mainUtilities.getListOfPersons(path)
+            #get list of persons of city
+            list = mainUtilities.getSubFolders(path)
             str = "\n".join(list)
             if(len(list)==0):
                 update.message.bot.send_message(update.message.chat.id,"no persons data for " + team + "," + city)
@@ -69,25 +96,29 @@ def handle_message(update,context):
             images = mainUtilities.getOnlyListImagesPath(path,list)
             for i in images:
                 t= images[i]
-                update.message.bot.send_photo(update.message.chat.id,open(t,'rb'),caption=i.replace('_',' '))
+                caption = mainUtilities.getInfo(path+"/"+i)
+                if(caption==""):
+                    caption = i
+                update.message.bot.send_photo(update.message.chat.id,open(t,'rb'),caption=caption)
+            return
+        else:
+            person_name = ' '.join(arr).lower()
+            path+= "/"+ '_'.join(arr).lower()
+            images = mainUtilities.getImagesOfFolder(path)
+            if(len(images)==0):
+                update.message.bot.send_message(update.message.chat.id,"no data")
+                return
+
+            #add caption
+            if(person_name!=''):
+                images[0].caption = person_name
+            
+
+            update.message.bot.send_media_group(update.message.chat.id,images)
             return
 
-
-        person_name = ' '.join(arr).lower()
-        path+= "/"+ '_'.join(arr).lower()
-
-    images = mainUtilities.getImagesOfFolder(path)
-    if(len(images)==0):
-        update.message.bot.send_message(update.message.chat.id,"no data")
-        return
-
-    #add caption
-    if(person_name!=''):
-        images[0].caption = person_name
-    
-
-    update.message.bot.send_media_group(update.message.chat.id,images)
-    return
+       
+  
 
 
     

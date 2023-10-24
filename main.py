@@ -4,10 +4,18 @@ from CONSTANTS import *
 import sqlite3
 import dbManager
 import mainUtilities
-import sys
+from threading import Thread
 from flashscoreScraper.dbManagerFlashscore import *
+import flashscoreScraper.flashscore_scraper
 
 print("KoureasBot started...")
+
+global updater
+
+def sendMessageToAdmin(txt):
+    bot = telegram.Bot(token=API_KEY)
+    bot.send_message(chat_id=5079376391, text=txt)
+
 
 
 def start_command(update,context):
@@ -24,6 +32,18 @@ def handle_message(update,context):
         return
     
     text = update.message.text
+
+#command for update flashscore data
+    if(text =="update data"):
+        if(dbManager.isAdmin(update.message.chat)):
+            Thread(target=flashscoreScraper.flashscore_scraper.run).start()
+            update.message.reply_text("update started...")
+            return
+        else:
+            update.message.reply_text("unauthorized for this command")
+            return
+
+
     arr =text.split(" ")
 
 
@@ -36,7 +56,11 @@ def handle_message(update,context):
     if(mainUtilities.isProgramComand(arr)):    
         matches = getImportantMatches(team) if mainUtilities.isImportantCommand(arr) else getAllMatches(team)
         str = mainUtilities.getMatchesText(matches)
-        update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.HTML)
+        if len(str) > 4096:
+            for x in range(0, len(str), 4096):
+                 update.message.bot.send_message(chat_id=update.message.chat.id,text=str[x:x+4096],parse_mode=telegram.ParseMode.HTML)
+        else:
+            update.message.bot.send_message(chat_id=update.message.chat.id,text=str,parse_mode=telegram.ParseMode.HTML)
         return
 
 
@@ -118,10 +142,6 @@ def handle_message(update,context):
             return
 
        
-  
-
-
-    
 
 def main():
     updater = Updater(API_KEY,use_context=True)
@@ -130,10 +150,12 @@ def main():
     dp.add_handler(CommandHandler("start",start_command))
     dp.add_handler(CommandHandler("help",help_command))
     dp.add_handler(MessageHandler(Filters.text,handle_message))
-
+    
     updater.start_polling(5)
     updater.idle()
 
     
 if __name__ == '__main__':
     main()
+  
+

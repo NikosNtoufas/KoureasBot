@@ -1,7 +1,13 @@
 import sqlite3
+from CONSTANTS import ADMIN_ID
 
 
+def isAdmin(chat):
+    if(chat.id==ADMIN_ID):
+        return True
+    return False
 
+     
 def userExists(chat):
     exist= False
     try:

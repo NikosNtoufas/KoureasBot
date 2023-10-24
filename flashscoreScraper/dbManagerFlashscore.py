@@ -1,5 +1,7 @@
 import sqlite3 
-from flashscoreScraper import CONSTANTS_FLASHSCORE
+import sys
+sys.path.append("flashscoreScraper")
+import CONSTANTS_FLASHSCORE
 
 
 def clearMatches(sport,competition):

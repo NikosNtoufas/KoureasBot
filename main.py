@@ -31,10 +31,10 @@ def handle_message(update,context):
         update.message.reply_text("Anauthorized user")
         return
     
-    text = update.message.text
+    text = update.message.text.lower()
 
 #command for update flashscore data
-    if(text =="update data"):
+    if(text =="update"):
         if(dbManager.isAdmin(update.message.chat)):
             Thread(target=flashscoreScraper.flashscore_scraper.run).start()
             update.message.reply_text("update started...")

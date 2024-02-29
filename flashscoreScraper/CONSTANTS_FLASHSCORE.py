@@ -12,6 +12,7 @@ FLASHSCORE_MAIN_TEAMS = {
   "ΑΕΚ":"ΑΕΚ",
   "ΑΕΚ Β":"ΑΕΚ",
   "ΑΕΚ Γ":"ΑΕΚ",
+  "AEK":"ΑΕΚ",
   "panathinaikos":"ΠΑΝΑΘΗΝΑΙΚΟΣ",
   "Παναθηναϊκός":"ΠΑΝΑΘΗΝΑΙΚΟΣ",
   "Παναθηναϊκός Β":"ΠΑΝΑΘΗΝΑΙΚΟΣ",
@@ -24,13 +25,14 @@ FLASHSCORE_MAIN_TEAMS = {
 }
 
 
-FLASHSCORE_NEARBY_TEAMS = ["Λεβαδειακός","ΠΑΣ Λαμία","Βόλος","ΠΑΣ Γιάννινα","Α.Σ. Καρδίτσας","Πήγασος Πολίχνης","Άθλος Ορεστιάδας",
-"Αριστοτέλης Σκύδρας","Λαμία Γ","Αερωπός Έδεσσας","Χιλιώτης Δράμα 1986","Ζαφειράκης Νάουσας","ΑΕΣΧ Πυλαίας","Χ.Α.Ν.Θ."]
+FLASHSCORE_NEARBY_TEAMS = ["ΠΑΣ Τρίκαλα","ΑΕΛ","Ελπίδες Καρδίτσας Γ","Καστοριά Γ","Σειρήνες Γρεβενών Γ","Τρίκαλα 2011 Γ","Βόλος 2004 Γ","Νίκη Βόλου","Πανσερραϊκός","Κοζάνη","Αναγέννηση Καρδίτσας","Ηρακλής Γ","Ηρακλής","Α.Σ. Καρδίτσας","Νίκη Λευκάδας Γ","ΠΑΣ Γιάννινα Γ","Ακαδημίες Πρωταθλητών Πεύκων Γ","Λαμία Γ",
+                           "Μακεδονικός","Λεβαδειακός","ΠΑΣ Λαμία","Βόλος","ΠΑΣ Γιάννινα","Πήγασος Πολίχνης","Άθλος Ορεστιάδας",
+"Αριστοτέλης Σκύδρας","Λαμία Γ","Αερωπός Έδεσσας","Χιλιώτης Δράμα 1986","Ζαφειράκης Νάουσας","ΟΦΘ","ΑΕΣΧ Πυλαίας","Χ.Α.Ν.Θ."]
 
 
 FLASCORE_COMPETITIONS ={
-    "football":["greece/super-league/","greece/super-league-2/",
-                "greece/greek-cup/","europe/champions-league/","europe/europa-league/","europe/europa-conference-league/"],
+    "football":["greece/division-a-women/","greece/super-league/","greece/super-league-2/",
+                "greece/greek-cup/","europe/champions-league/","europe/europa-league/","europe/europa-conference-league/",],
     "basketball":["greece/basket-league/","greece/greek-cup/","europe/euroleague/","europe/eurocup/",
                     "europe/champions-league/","greece/a1-women/"],
     "volleyball": ["greece/a1/","greece/league-cup/","greece/greek-cup/","greece/a1-women/","greece/greek-cup-women/",
@@ -54,6 +56,7 @@ FLASCORE_SPORTS_NAMING = {
 
 
 FLASCORE_COMPETITIONS_NAMING = {
+  "football greece/division-a-women/":"ΣΟΥΠΕΡ ΛΙΓΚ ΓΥΝΑΙΚΩΝ",
   "football greece/super-league/":"ΣΟΥΠΕΡ ΛΙΓΚ",
   "football greece/super-league-2/":"ΣΟΥΠΕΡ ΛΙΓΚ 2",
   "football greece/greek-cup/":"KΥΠΕΛΛΟ ΕΛΛΑΔΟΣ",

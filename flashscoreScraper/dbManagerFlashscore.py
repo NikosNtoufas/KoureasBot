@@ -57,7 +57,7 @@ def getAllMatches(team):
         
         par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]))
         if(team==""):
-            sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
+            sql = ''' select * from matches where() homeTeam=? or awayTeam=? ) '''
         else:
             sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
 

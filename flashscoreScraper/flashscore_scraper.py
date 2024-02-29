@@ -9,10 +9,12 @@ import sqlite3
 import dbManagerFlashscore
 import flashscore_scraperUtilities
 from main import sendMessageToAdmin
+from selenium.webdriver.firefox.options import Options
 
 
 def run():
-    driver = webdriver.Chrome(executable_path=r'C:\WebDriver\bin\chromedriver-win64\chromedriver-win64\chromedriver.exe')
+    driver = webdriver.Chrome(executable_path=r'C:\WebDriver\chromedriver.exe')
+
 
     try:
         for sport in CONSTANTS_FLASHSCORE.FLASCORE_COMPETITIONS.keys():
@@ -40,6 +42,6 @@ def run():
         sendMessageToAdmin("Updated finished succesfully!")
 
         return
-    except:
+    except Exception as e:
         sendMessageToAdmin("Error on update!")
     return

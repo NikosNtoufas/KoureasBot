@@ -4,6 +4,8 @@ from telegram import InputMediaPhoto
 from fnmatch import fnmatch
 import pathlib
 from pathlib import Path
+from datetime import datetime, timedelta
+
 
 def getTeam(arr):
     for x in arr:
@@ -111,6 +113,12 @@ def isImportantCommand(arr):
     for x in arr:
         if x.lower() in list:
             return True
+        
+def filterNext7Days(x):
+    today = datetime.now()
+    x=x + str(today.year)
+    event_datetime = datetime.strptime(x,'%d.%m.%Y')
+    return today <= event_datetime <= today + timedelta(days=7)
 
 
 def getMatchesText(matches):

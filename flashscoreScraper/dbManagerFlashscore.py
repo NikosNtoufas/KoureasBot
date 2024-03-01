@@ -55,10 +55,10 @@ def getAllMatches(team):
     try:
         sqliteConnection = sqlite3.connect('flashscoreMatches.db')
         
-        par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]))
         if(team==""):
-            sql = ''' select * from matches where() homeTeam=? or awayTeam=? ) '''
+            sql = ''' select * from matches  '''
         else:
+            par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]))
             sql = ''' select * from matches where homeTeam=? or awayTeam=? '''
 
         cursor = sqliteConnection.cursor()
@@ -81,10 +81,11 @@ def getImportantMatches(team):
     try:
         sqliteConnection = sqlite3.connect('flashscoreMatches.db')
         
-        par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),"very high","high")
         if(team==""):
+            par = ("very high","high")
             sql = ''' select * from matches where (importance=? or importance =?)'''
         else:
+            par = (str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),str(CONSTANTS_FLASHSCORE.FLASHSCORE_MAIN_TEAMS[team]),"very high","high")
             sql = ''' select * from matches where (homeTeam=? or awayTeam=?) and (importance=? or importance =?) '''
 
         cursor = sqliteConnection.cursor()

@@ -7,7 +7,23 @@ def isAdmin(chat):
         return True
     return False
 
-     
+def getUsers():
+    try:
+        sqliteConnection = sqlite3.connect('valantisBot.db')
+        cursor = sqliteConnection.cursor()
+        cursor.execute('select * from users where active==1')
+        users = cursor.fetchall()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+    return users
+
+
 def userExists(chat):
     exist= False
     try:

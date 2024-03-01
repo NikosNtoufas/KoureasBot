@@ -7,6 +7,7 @@ import mainUtilities
 from threading import Thread
 from flashscoreScraper.dbManagerFlashscore import *
 import flashscoreScraper.flashscore_scraper
+import datetime
 
 print("KoureasBot started...")
 
@@ -16,6 +17,33 @@ def sendMessageToAdmin(txt):
     bot = telegram.Bot(token=API_KEY)
     bot.send_message(chat_id=5079376391, text=txt)
 
+
+
+def importantMatchesJob(context: telegram.ext.CallbackContext):
+    matches = getImportantMatches("")
+    nextMatches = [match for match in matches if mainUtilities.filterNext7Days(match[3])]
+
+    if(len(nextMatches)>0):
+        str = mainUtilities.getMatchesText(nextMatches)
+        if len(str) > 4096:
+            for user in dbManager.getUsers():
+                for x in range(0, len(str), 4096):
+                    context.bot.send_message(chat_id=user[0],text=str[x:x+4096],parse_mode=telegram.ParseMode.HTML)
+        else:
+            for user in dbManager.getUsers():
+                context.bot.send_message(chat_id=user[0],text=str,parse_mode=telegram.ParseMode.HTML)
+
+def matchesJob(context: telegram.ext.CallbackContext):
+    matches = getAllMatches("")
+    nextMatches = [match for match in matches if mainUtilities.filterNext7Days(match[3])]
+
+    if(len(nextMatches)>0):
+        str = mainUtilities.getMatchesText(nextMatches)
+        if len(str) > 4096:
+            for x in range(0, len(str), 4096):
+                context.bot.send_message(chat_id=5079376391,text=str[x:x+4096],parse_mode=telegram.ParseMode.HTML)
+        else:
+            context.bot.send_message(chat_id=5079376391,text=str,parse_mode=telegram.ParseMode.HTML)
 
 
 def start_command(update,context):
@@ -150,11 +178,15 @@ def main():
     dp.add_handler(CommandHandler("start",start_command))
     dp.add_handler(CommandHandler("help",help_command))
     dp.add_handler(MessageHandler(Filters.text,handle_message))
-    
+
+    j = updater.job_queue
+    j.run_repeating(importantMatchesJob, interval=259200, first=10)
+    t = datetime.time(hour=12, minute=00, second=00)
+    j.run_daily(matchesJob, t, days=tuple(range(1)))
+
     updater.start_polling(5)
     updater.idle()
-
-    
+  
 if __name__ == '__main__':
     main()
   
